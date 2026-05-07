@@ -14,10 +14,14 @@ type HabitData = {
 
 type Props = {
   habitData: HabitData;
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
 };
 
 export default function MonthCalendar({
   habitData,
+  selectedDate,
+  setSelectedDate,
 }: Props) {
   const today = new Date();
 
@@ -51,16 +55,19 @@ export default function MonthCalendar({
           const dateKey = format(day, "yyyy-MM-dd");
 
           return (
-            <div
+            <button
               key={dateKey}
-              className={`aspect-square rounded-xl p-2 text-sm transition ${getCompletionColor(
-                dateKey
-              )}`}
+              onClick={() => setSelectedDate(dateKey)}
+              className={`aspect-square rounded-xl p-2 text-sm transition border ${
+                selectedDate === dateKey
+                  ? "border-white"
+                  : "border-transparent"
+              } ${getCompletionColor(dateKey)}`}
             >
               <div className="flex h-full items-start justify-end">
                 {format(day, "d")}
               </div>
-            </div>
+            </button>
           );
         })}
       </div>

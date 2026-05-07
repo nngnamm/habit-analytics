@@ -13,6 +13,8 @@ type HabitData = {
 
 export default function HabitTracker() {
   const today = getTodayDate();
+  const [selectedDate, setSelectedDate] =
+  useState(today);
 
   const [habitData, setHabitData] = useState<HabitData>({});
 
@@ -31,10 +33,11 @@ export default function HabitTracker() {
     );
   }, [habitData]);
 
-  const completedHabits = habitData[today] || [];
+  const completedHabits = 
+    habitData[selectedDate] || [];
 
   function toggleHabit(id: number) {
-    const currentHabits = habitData[today] || [];
+    const currentHabits = habitData[selectedDate] || [];
 
     let updatedHabits;
 
@@ -48,7 +51,7 @@ export default function HabitTracker() {
 
     setHabitData({
       ...habitData,
-      [today]: updatedHabits,
+      [selectedDate]: updatedHabits,
     });
   }
 
@@ -65,7 +68,7 @@ export default function HabitTracker() {
           </h2>
 
           <p className="mt-1 text-sm text-neutral-400">
-            {today}
+            {selectedDate}
           </p>
         </div>
 
@@ -107,7 +110,11 @@ export default function HabitTracker() {
           );
         })}
       </div>
-      <MonthCalendar habitData={habitData} />
+      <MonthCalendar
+  habitData={habitData}
+  selectedDate={selectedDate}
+  setSelectedDate={setSelectedDate}
+/>
     </div>
   );
 }
