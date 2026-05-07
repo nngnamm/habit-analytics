@@ -7,8 +7,14 @@ import MonthCalendar from "./month-calendar";
 
 const STORAGE_KEY = "habit-tracker-data";
 
+type DayData = {
+  habits: number[];
+  mood?: number;
+  motivation?: number;
+};
+
 type HabitData = {
-  [date: string]: number[];
+  [date: string]: DayData;
 };
 
 export default function HabitTracker() {
@@ -34,10 +40,10 @@ export default function HabitTracker() {
   }, [habitData]);
 
   const completedHabits = 
-    habitData[selectedDate] || [];
+  habitData[selectedDate]?.habits || [];
 
   function toggleHabit(id: number) {
-    const currentHabits = habitData[selectedDate] || [];
+    const currentHabits = habitData[selectedDate]?.habits || [];
 
     let updatedHabits;
 
@@ -48,11 +54,13 @@ export default function HabitTracker() {
     } else {
       updatedHabits = [...currentHabits, id];
     }
-
-    setHabitData({
-      ...habitData,
-      [selectedDate]: updatedHabits,
-    });
+      setHabitData({
+  ...habitData,
+  [selectedDate]: {
+    ...habitData[selectedDate],
+    habits: updatedHabits,
+  },
+});
   }
 
   const completionRate = Math.round(
@@ -110,6 +118,73 @@ export default function HabitTracker() {
           );
         })}
       </div>
+      <div className="mt-8 grid grid-cols-2 gap-6">
+  <div className="rounded-xl bg-neutral-800 p-4">
+    <h3 className="text-lg font-medium">
+      Mood
+    </h3>
+
+    <div className="mt-4 flex gap-2 flex-wrap">
+      {Array.from({ length: 10 }, (_, i) => i + 1).map(
+        (value) => (
+          <button
+            key={value}
+            onClick={() =>
+              setHabitData({
+                ...habitData,
+                [selectedDate]: {
+                  ...habitData[selectedDate],
+                  habits: completedHabits,
+                  mood: value,
+                },
+              })
+            }
+            className={`h-10 w-10 rounded-lg transition ${
+              habitData[selectedDate]?.mood === value
+                ? "bg-blue-500"
+                : "bg-neutral-700"
+            }`}
+          >
+            {value}
+          </button>
+        )
+      )}
+    </div>
+  </div>
+
+  <div className="rounded-xl bg-neutral-800 p-4">
+    <h3 className="text-lg font-medium">
+      Motivation
+    </h3>
+
+    <div className="mt-4 flex gap-2 flex-wrap">
+      {Array.from({ length: 10 }, (_, i) => i + 1).map(
+        (value) => (
+          <button
+            key={value}
+            onClick={() =>
+              setHabitData({
+                ...habitData,
+                [selectedDate]: {
+                  ...habitData[selectedDate],
+                  habits: completedHabits,
+                  motivation: value,
+                },
+              })
+            }
+            className={`h-10 w-10 rounded-lg transition ${
+              habitData[selectedDate]?.motivation === value
+                ? "bg-purple-500"
+                : "bg-neutral-700"
+            }`}
+          >
+            {value}
+          </button>
+        )
+      )}
+    </div>
+  </div>
+</div>
       <MonthCalendar
   habitData={habitData}
   selectedDate={selectedDate}

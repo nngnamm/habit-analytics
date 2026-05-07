@@ -8,8 +8,14 @@ import {
   startOfMonth,
 } from "date-fns";
 
+type DayData = {
+  habits: number[];
+  mood?: number;
+  motivation?: number;
+};
+
 type HabitData = {
-  [date: string]: number[];
+  [date: string]: DayData;
 };
 
 type Props = {
@@ -31,7 +37,8 @@ export default function MonthCalendar({
   });
 
   function getCompletionColor(date: string) {
-    const completed = habitData[date]?.length || 0;
+    const completed =
+      habitData[date]?.habits.length || 0;
 
     if (completed === 0) {
       return "bg-neutral-800";
