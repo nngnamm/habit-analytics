@@ -1,5 +1,6 @@
 import Sidebar from "@/components/layout/sidebar";
 import DashboardCards from "@/components/dashboard/dashboard-cards";
+import HabitTracker from "@/components/tracker/habit-tracker";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         </h2>
 
         <DashboardCards />
+        <HabitTracker />
       </section>
     </main>
   );
