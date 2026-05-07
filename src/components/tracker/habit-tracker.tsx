@@ -5,6 +5,7 @@ import { habits } from "@/data/habits";
 import { getTodayDate } from "@/lib/date";
 import MonthCalendar from "./month-calendar";
 import StatsDashboard from "../stats/stats-dashboard";
+import MoodChart from "../stats/mood-chart";
 
 const STORAGE_KEY = "habit-tracker-data";
 
@@ -187,6 +188,7 @@ export default function HabitTracker() {
   </div>
 </div>
 <StatsDashboard habitData={habitData} />
+<MoodChart habitData={habitData} />
       <MonthCalendar
   habitData={habitData}
   selectedDate={selectedDate}
