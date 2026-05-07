@@ -1,10 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { habits } from "@/data/habits";
+
+const STORAGE_KEY = "habit-tracker-data";
 
 export default function HabitTracker() {
   const [completedHabits, setCompletedHabits] = useState<number[]>([]);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+
+    if (savedData) {
+      setCompletedHabits(JSON.parse(savedData));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(completedHabits)
+    );
+  }, [completedHabits]);
 
   function toggleHabit(id: number) {
     if (completedHabits.includes(id)) {
@@ -16,11 +33,21 @@ export default function HabitTracker() {
     }
   }
 
+  const completionRate = Math.round(
+    (completedHabits.length / habits.length) * 100
+  );
+
   return (
     <div className="mt-10 rounded-2xl bg-neutral-900 p-6">
-      <h2 className="text-2xl font-semibold">
-        Today's Habits
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold">
+          Today's Habits
+        </h2>
+
+        <div className="text-sm text-neutral-400">
+          {completionRate}% completed
+        </div>
+      </div>
 
       <div className="mt-6 space-y-4">
         {habits.map((habit) => {
