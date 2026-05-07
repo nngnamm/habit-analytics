@@ -2,35 +2,53 @@
 
 import { useEffect, useState } from "react";
 import { habits } from "@/data/habits";
+import { getTodayDate } from "@/lib/date";
 
 const STORAGE_KEY = "habit-tracker-data";
 
+type HabitData = {
+  [date: string]: number[];
+};
+
 export default function HabitTracker() {
-  const [completedHabits, setCompletedHabits] = useState<number[]>([]);
+  const today = getTodayDate();
+
+  const [habitData, setHabitData] = useState<HabitData>({});
 
   useEffect(() => {
     const savedData = localStorage.getItem(STORAGE_KEY);
 
     if (savedData) {
-      setCompletedHabits(JSON.parse(savedData));
+      setHabitData(JSON.parse(savedData));
     }
   }, []);
 
   useEffect(() => {
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(completedHabits)
+      JSON.stringify(habitData)
     );
-  }, [completedHabits]);
+  }, [habitData]);
+
+  const completedHabits = habitData[today] || [];
 
   function toggleHabit(id: number) {
-    if (completedHabits.includes(id)) {
-      setCompletedHabits(
-        completedHabits.filter((habitId) => habitId !== id)
+    const currentHabits = habitData[today] || [];
+
+    let updatedHabits;
+
+    if (currentHabits.includes(id)) {
+      updatedHabits = currentHabits.filter(
+        (habitId) => habitId !== id
       );
     } else {
-      setCompletedHabits([...completedHabits, id]);
+      updatedHabits = [...currentHabits, id];
     }
+
+    setHabitData({
+      ...habitData,
+      [today]: updatedHabits,
+    });
   }
 
   const completionRate = Math.round(
@@ -40,9 +58,15 @@ export default function HabitTracker() {
   return (
     <div className="mt-10 rounded-2xl bg-neutral-900 p-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">
-          Today's Habits
-        </h2>
+        <div>
+          <h2 className="text-2xl font-semibold">
+            Today's Habits
+          </h2>
+
+          <p className="mt-1 text-sm text-neutral-400">
+            {today}
+          </p>
+        </div>
 
         <div className="text-sm text-neutral-400">
           {completionRate}% completed
