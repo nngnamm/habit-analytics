@@ -8,12 +8,26 @@ export default function Home() {
       <Sidebar />
 
       <section className="flex-1 p-10">
-        <h2 className="text-3xl font-semibold">
-          Dashboard
-        </h2>
+        <div className="max-w-6xl mx-auto space-y-10">
+          
+          {/* HEADER */}
+          <div>
+            <h1 className="text-3xl font-semibold">
+              Dashboard
+            </h1>
 
-        <DashboardCards />
-        <HabitTracker />
+            <p className="text-sm text-neutral-400 mt-1">
+              Track habits, mood, motivation, and progress insights
+            </p>
+          </div>
+
+          {/* STATS */}
+          <DashboardCards />
+
+          {/* TRACKER */}
+          <HabitTracker />
+
+        </div>
       </section>
     </main>
   );
