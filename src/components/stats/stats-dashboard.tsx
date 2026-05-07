@@ -1,3 +1,5 @@
+import { calculateStreaks } from "@/lib/streak";
+
 type DayData = {
   habits: number[];
   mood?: number;
@@ -18,7 +20,9 @@ export default function StatsDashboard({
   const days = Object.values(habitData);
 
   const totalDays = days.length;
-
+const streaks = calculateStreaks(
+  Object.keys(habitData)
+);
   const totalHabitsCompleted = days.reduce(
     (acc, day) => acc + day.habits.length,
     0
@@ -40,7 +44,7 @@ export default function StatsDashboard({
       days.filter((day) => day.motivation).length || 0;
 
   return (
-    <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       <div className="rounded-2xl bg-neutral-900 p-6">
         <p className="text-sm text-neutral-400">
           Tracked Days
@@ -80,6 +84,25 @@ export default function StatsDashboard({
           {averageMotivation.toFixed(1)}
         </h2>
       </div>
-    </div>
+    <div className="rounded-2xl bg-neutral-900 p-6">
+  <p className="text-sm text-neutral-400">
+    Current Streak
+  </p>
+
+  <h2 className="mt-2 text-3xl font-bold">
+    🔥 {streaks.currentStreak}
+  </h2>
+</div>
+
+<div className="rounded-2xl bg-neutral-900 p-6">
+  <p className="text-sm text-neutral-400">
+    Best Streak
+  </p>
+
+  <h2 className="mt-2 text-3xl font-bold">
+    🏆 {streaks.bestStreak}
+  </h2>
+</div>
+      </div>
   );
 }
