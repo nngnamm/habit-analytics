@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { habits } from "@/data/habits";
 import { getTodayDate } from "@/lib/date";
+import MonthCalendar from "./month-calendar";
 
 const STORAGE_KEY = "habit-tracker-data";
 
@@ -106,6 +107,7 @@ export default function HabitTracker() {
           );
         })}
       </div>
+      <MonthCalendar habitData={habitData} />
     </div>
   );
 }
